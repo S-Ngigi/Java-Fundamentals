@@ -81,7 +81,9 @@ Now a *literal* refers to any number, text or other information that directly re
 **_Hexidecimal_**
 
 **int** y = **Ox**41; hexidecimal.y = 65 ($4*16^1+1*16^0$)
+
 **int** y = **Ob**01000001; binary.y = 65 ($4*16^1+1*16^0$)
+
 **int** y = **Ox**41; octal.y = 65 ($4*16^1+1*16^0$)
 
 ### Floating-point Numbers
