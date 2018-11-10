@@ -24,7 +24,10 @@ We have
 
 ## Variable data types
 
-### Primitive data-types/variables
+1. Primitive Data-types/vars
+2. Reference Data-types/vars (Object references)
+
+## Primitive data-types/variables
 
 * Boolean
 * Number
@@ -187,10 +190,191 @@ class Main {
   * Unicode is a character set like ACII which can represent all characters in all languages in the world
   * Unicode has several encoding schemes/standards and UTF-16 is just one of them. Here's an example
 
-  > "A" == 0041 **Hex** == 0000 0000 0100 0001 **Binary** == 65 **Decimal**
+> "A" == 0041 **Hex** == 0000 0000 0100 0001 **Binary** == 65 **Decimal**
 
 **NOTE**: Apart from Java, C# and python also internally use UTF-16 to store characters.
 
 For more information on data represntation of primitives click [here](http://www3.ntu.edu.sg/home/ehchua/programming/java/DataRepresentation.html)
 
-### Reference datatypes/variables
+### Boolean
+
+This is a primitive that returns either true or false.
+
+|   Type      |   Bit depth   |   Value Range          |   Default   |
+|   :---:     |   :-------:   |   :---------:          |   :-----:   |
+|   boolean   |   JVM         |   true or false        |   false     |
+
+The bit depth of a boolean is jvm specific meaning that the jvm on a windows machine might
+allocate a different number of bits as compared to a mac.
+
+## Variable: Type Casting
+
+We have established that Java is a statically typed language. This means that when we are
+declaring variables we have to assign it a particular type. Wether **int**, **char** or
+**boolean**. Once assigned it can be reassigned but with vars of the same type as it was
+initialied with.
+
+Sometimes we may have to assign a variable with a value of a different data type. In that
+case that value will have to be cast or converted to the data type of the new variable.
+
+So we **type cast** when we want to assign a *variable* or *literal* of one type to a *variable* of another type.
+
+E.g. We may want to assign a var or literal of type *long*/*byte* to type *int*. We would do this through type-casting.
+
+**Note**: Only **_numeric-to-numeric_** casting is possible.
+
+So we cannot type-cast a boolean value or vice versa.
+
+Now we have 2 types of casting.
+
+1. **Implicit type casting**. _Widening conversion_
+
+    This is done from a _Smaller_ range data-type to a  _Larger_ range data-type. E.g.
+
+    ```Java
+    int x = 65;
+    long y = x // Implicit casting by the compiler.
+    ```
+    This means that the cast is implied. We can still use the parentisis to indicate a cast here. It would be called a superflous cast. e.g.
+
+    ```Java
+    byte b = 65;
+    char c =  (char) b; // Superflous case c = 'A'
+    ```
+
+    **Note**: An implicit cast only works from smaller data-type -> larger i.e
+
+    > byte (8-bit) => short, char (16-bit) => int (32 bit) => long (64-bit) => float (32-bit) => double (64-bit)
+
+    **Note** the range of values represented by a 32 bit float is larger that a 64-bit long due to the IEEE 754 data representation of a float.
+
+2. **Explicit type casting** ~ _Narrowing conversion_
+
+    This is done from a _Larger_ range data-type to a  _Smaller_ range data-type. E.g.
+
+    ```Java
+    long y = 42;
+    int x = (int) y; // Explicit casting.
+    ```
+
+    Since ```long``` is larger tht ```int``` we have an explicit type cast. In the above example we would get a compilation error.
+
+    **Note** explicit casts only work from larger data-type --> smaller i.e
+
+    > byte (8-bit) <=> char (16-bit) <=> short (16-bit) <= int (32 bit) <= long (64-bit) <= float (32-bit) <= double (64-bit)
+
+## Information Loss in Explicit Casting
+
+* **Out of range** assingments.
+
+  Example: Here we would output _64_ instead of _123456_ because we since byte only uses 8 bits, only the 8 bit part of 123456 would be considered. This result to 64 as the output.
+
+  ```Java
+  byte smallByte = (byte) 123456 // returns 64
+  ```
+
+* **Truncation**
+
+  Floating-point cast to integer/char will always truncate. E.g.
+
+  ```Java
+  int x = (int) 3.14; // returns x=3
+  int y = (int) 0.9; // returns y=0
+  char c = (char) 65.5; // returns c = 'A'
+  ```
+
+## Information Loss in Implicit Casting
+
+In general we will not encounter loss of information with implicit casting but to be precises in few assignments there is a possibility of information loss.
+
+Example: When casting a **int** or **long** => **float** or long => **double** could lead to loss of precision. This is because the resulting value my lose the least significant bits of the value that is being assigned.
+
+```Java
+int val = 1234567890;
+float f = val; // implicit cast
+int resVal = (float) f; // 1234567936 -> Loss in precision.
+```
+
+### Casting Usec-cases
+
+* Implicit Casting
+
+    ```Java
+    go(double d1, double d2) {
+        System.out.println(d1, d2)
+    }
+
+    float f1 = 3.133f;
+    float f2 = 4.153f;
+
+    go(f1, f2) // Implicit cast here. -> returns double values
+    ```
+
+* Explicit Casting
+
+```Java
+double avg = (2+3)/2; // returns 2.0 not 2.5
+double avg = (double) (2+3)/2; // returns correct value 2.5
+```
+
+## Reference datatypes/variables (Object References)
+
+Below is an example of an object reference variable, whereby s is an reference var and not an object itself.
+
+In other words `s` hold bits that references a `Student object` in memory.
+
+Basically the stament below has 3 parts to it that tell the JVM to do specific things.
+
+```Java
+Student s = new Student();
+```
+
+1. `Student s` - Tell the JVM to allocate space for the reference variable s
+2. `new Student()` - Allocate space for new student object in memory.
+3. `=` - We assign the memory address of the new Student object to our reference variable s.
+
+Now objects are stored in a special area of memory that is assigned to JVM.
+
+When the JVM starts up it gets a chunk of memory from the underlying OS in order to run its programs. One area of this memory is called a **Heap**.
+
+**All Java Objects are stored/live on the heap.**
+
+> The bit-depth of an **object-reference** is JVM specific, as in the bit depth on a Linux JVM may be different from the bit depth on a Windows or Mac JVM.
+>
+>However on a given JVM the bit depth of an object-reference will be the same regardless of whatever Object they reference.
+
+The Default value for an Object reference is `null`;
+
+```Java
+Student s; // s is null until initialized
+s.updateProfile(); // Calling a method on a null value returns a NullPointerException
+```
+
+## Statements
+
+Statements are basically commands to be executed. We categorize statements into 3.
+
+1. Declaration Statements
+
+    ```Java
+    int count = 25;
+    ```
+2. Expression Statements
+
+    ```Java
+    count = 25; // assignment statement
+    getCount(); // method invocation statement
+    count++; // increment statement
+    ```
+3. Control flow statements
+
+    ```Java
+    if (count < 100) {
+        // do something.
+    }
+    ```
+
+**Note**: Declaration statements are the only statement allow at class level. The rest
+(Expression & Control-Flow Statements) result in compilation errors.
+
+Next we will take a brief look at [arrays](./Array.md)
