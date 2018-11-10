@@ -60,6 +60,14 @@ student[0].name = "John";
 student[1].name = "Raj";
 ```
 
+**Note** to return the array itself we have to
+
+```Java
+import java.utils.Arrays;
+
+System.out.println(Arrays.toString(intArray)); // returns [9,11,2,5,4,7,7]
+```
+
 ### Random Access
 
 It is believed that the JVM uses a Linear layout (items next to eact other index wise) when accessing we want to access any value using their indices.
